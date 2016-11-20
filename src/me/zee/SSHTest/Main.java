@@ -9,9 +9,11 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -55,8 +57,6 @@ public class Main {
 			StringSelection selection = new StringSelection("http://craftmountain.net/s/" + random + "." + format);
 		    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		    clipboard.setContents(selection, selection);
-		    
-		    Files.deleteIfExists(f.toPath()); //So I don't have to worry about exceptions
 		} catch(Exception e) {
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
@@ -66,6 +66,12 @@ public class Main {
 			StringSelection selection = new StringSelection(exc);
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			clipboard.setContents(selection, selection);
+		} finally {
+			try {
+				Files.deleteIfExists(Paths.get("temp.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
